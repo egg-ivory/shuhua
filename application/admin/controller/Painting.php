@@ -17,6 +17,8 @@ use think\Validate;
 
 class Painting extends BaseController
 {
+
+
     //画作列表
     public function index(){
 
