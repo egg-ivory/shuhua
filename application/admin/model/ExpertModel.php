@@ -58,15 +58,16 @@ class ExpertModel extends BaseModel
         return $this->allowField(true)->isUpdate(true)->save($data);
     }
 
+    //查找
+    public function findExpert($condition){
+        return $this->where($condition)->select()->toArray();
+    }
+
     //重置密码
     public function resetExpert($expertId){
         $data['password']=Ivory::myEncrypt(config('custom.resetMjPassword'));
         return $this->allowField(true)->Update($data,$expertId);
     }
 
-    //查找
-    public function findExpert($condition){
-        return $this->where($condition)->select()->toArray();
-    }
 
 }
