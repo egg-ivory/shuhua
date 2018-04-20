@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+
+    <style>
+
+    </style>
+</head>
+<body>
+<!-- 头部 -->
+{include file="public/head"/}
+<!-- 引入侧边栏菜单 -->
+{include file="public/sidebar"/}
+
+<!-- 引入顶部导航 -->
+{include file="public/top_nav"/}
+<style>
+    .layui-table tr th{color:black;}
+    .layui-table tr th,td{text-align:center;}
+    .layui-form-select{width:100px;}
+</style>
+<!--内容开始-->
+<div class="right_col" role="main">
+
+    <div class="col-md-12 col-sm-12 col-xs-12 ">
+        <div style="margin:0 0 10px 0px;background:white;padding:15px;"><a href="/admin">主页</a> > <a href="{:url('/admin/user/userList')}">用户信息</a></div>
+
+        <div class="layui-tab layui-tab-brief" lay-filter="user-tab">
+            <ul class="layui-tab-title">
+                <li class="layui-this">用户个人信息</li>
+                <li class="">用户芝麻信息</li>
+                <li class="">用户车辆信息</li>
+                <li class="">用户保险信息</li>
+                <li class="">用户贷款信息</li>
+            </ul>
+            <div class="layui-tab-content mt-20">
+                <!--个人信息栏-->
+                <div class="layui-tab-item layui-show layui-col-md12">
+                    <form class="layui-form" method="post" action="" id ='add-user' lay-filter="form1" autocomplete="off">
+                        <div class="layui-form-item ">
+                            <label class="layui-form-label">姓名</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="name" required  lay-verify="required" placeholder="请输入姓名" value="{$userData['name']}" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item hidden">
+                            <label class="layui-form-label">用户ID</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="user_id" required  lay-verify="required" placeholder="请输ID" value="{$userData['user_id']}" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item" pane>
+                            <label class="layui-form-label">性别</label>
+                            <div class="layui-input-block">
+                                <input type="radio" name="gender" value=1 title="男" {if condition="$userData['gender'] eq '男'"}checked{/if}>
+                                <input type="radio" name="gender" value=0 title="女" {if condition="$userData['gender'] eq '女'"}checked{/if}>
+                                <input type="radio" name="gender" value=2 title="未知" {if condition="$userData['gender'] eq '未知'"}checked{/if}>
+                            </div>
+                        </div>
+                        <div class="layui-form-item ">
+                            <label class="layui-form-label">电话号码</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="phone" required  lay-verify="required" placeholder="请输入电话号码" autocomplete="off" class="layui-input" value="{$userData['phone']}">
+                            </div>
+                        </div>
+                        <div class="layui-form-item ">
+                            <label class="layui-form-label">身份证号</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="id_card" required  lay-verify="required" placeholder="请输入身份证号" autocomplete="off" class="layui-input" value="{$userData['id_card']}">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">密码框</label>
+                            <div class="layui-input-inline">
+                                <input type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">辅助文字</div>
+                        </div>
+
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">选择框</label>
+                            <div class="layui-input-block">
+                                <select name="city" lay-verify="required">
+                                    <option value=""></option>
+                                    <option value="0">北京</option>
+                                    <option value="1">上海</option>
+                                    <option value="2">广州</option>
+                                    <option value="3">深圳</option>
+                                    <option value="4">杭州</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">审核状态</label>
+                            <div class="layui-input-block">
+
+                                <input type="checkbox" name="status" lay-skin="switch" lay-text="ON|OFF" value="1" {if condition="$userData['status'] eq '1'"}checked{/if} >
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">文本域</label>
+                            <div class="layui-input-block">
+                                <textarea name="desc" placeholder="请输入内容" class="layui-textarea"></textarea>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn" lay-submit="" lay-filter="submit1">点击修改</button>
+                                <!--<button type="button" class="layui-btn" onclick="confirmSubmit('add-user');">点击修改</button>-->
+                                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="actionType" value="edit">
+                    </form>
+                </div>
+
+                <!--芝麻信息-->
+                <div class="layui-tab-item">
+
+                </div>
+
+                <!--车辆信息-->
+                <div class="layui-tab-item">
+                    <div class="layui-tab-content">
+                        <div class="x_title">
+                            <h2>车辆列表</h2>
+                            <ul class="nav navbar-right panel_toolbox">
+                                <li><a href="{:url('/admin/user_car/addUserCar?user_id='.$userData['user_id'])}"><i class="glyphicon glyphicon-plus"></i> 新增</a></li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                        <!-- 表格 -->
+                        <table class="layui-hide" id="user-car-list" lay-filter="user-car-list"></table>
+                        <script type="text/html" id="user-car-list-toolbar">
+                            <button class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</button>
+                            <button class="layui-btn layui-btn-success layui-btn-xs" lay-event="edit">编辑</button>
+                        </script>
+                    </div>
+
+                </div>
+
+                <div class="layui-tab-item">
+                    <!--添加用户保险部分-->
+                    <form class="layui-form" method="post" action="" id ='add-user-insurance' >
+
+                        <div class="layui-form-item ">
+                            <label class="layui-form-label">姓名</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="user_name" required  lay-verify="required" placeholder="用户姓名" autocomplete="off" class="layui-input" id="user-name-insurance" readonly="true">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item ">
+                            <label class="layui-form-label">用户id</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="user_id" required  lay-verify="required" placeholder="用户id" autocomplete="off" class="layui-input" id="user-id-insurance"  readonly="true" >
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">用户车辆ID</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="uc_id" required  lay-verify="required" placeholder="用户车辆ID" autocomplete="off" class="layui-input" id="uc_id-insurance"  readonly="true" >
+                            </div>
+
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">车辆品牌</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="brand" required  lay-verify="required" placeholder="车辆品牌" autocomplete="off" class="layui-input" id="car-brand-insurance"  readonly="true" >
+                            </div>
+
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">车辆名称</label>
+
+                            <div class="layui-input-block">
+                                <input type="text" name="name" required  lay-verify="required" placeholder="车辆品牌" autocomplete="off" class="layui-input" id="car-name-insurance"  readonly="true" >
+                            </div>
+
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">车辆款式</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="style" required  lay-verify="required" placeholder="车辆款式" autocomplete="off" class="layui-input" id="car-style-insurance"  readonly="true" >
+                            </div>
+
+                        </div>
+
+
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">文本域</label>
+                            <div class="layui-input-block">
+                                <textarea name="desc" placeholder="请输入内容" class="layui-textarea"></textarea>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button type="button" class="layui-btn" onclick="confirmSubmit2('add-user-insurance');">点击添加</button>
+                                <!--<button type="reset" class="layui-btn layui-btn-primary">重置</button>-->
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="actionType" value="add">
+                    </form>
+
+                </div>
+
+                <div class="layui-tab-item">
+                    <!--添加用户车贷部分-->
+                    <form class="layui-form" method="post" action="" id ='add-user-payment' >
+
+                        <div class="layui-form-item ">
+                            <label class="layui-form-label">姓名</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="user_name" required  lay-verify="required" placeholder="用户姓名" autocomplete="off" class="layui-input" id="user-name-payment" readonly="true">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item ">
+                            <label class="layui-form-label">用户id</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="user_id" required  lay-verify="required" placeholder="用户id" autocomplete="off" class="layui-input" id="user-id-payment"  readonly="true" >
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">用户车辆ID</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="uc_id" required  lay-verify="required" placeholder="用户车辆ID" autocomplete="off" class="layui-input" id="uc_id-payment"  readonly="true" >
+                            </div>
+
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">车辆品牌</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="brand" required  lay-verify="required" placeholder="车辆品牌" autocomplete="off" class="layui-input" id="car-brand-payment"  readonly="true" >
+                            </div>
+
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">车辆名称</label>
+
+                            <div class="layui-input-block">
+                                <input type="text" name="name" required  lay-verify="required" placeholder="车辆品牌" autocomplete="off" class="layui-input" id="car-name-payment"  readonly="true" >
+                            </div>
+
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">车辆款式</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="style" required  lay-verify="required" placeholder="车辆款式" autocomplete="off" class="layui-input" id="car-style-payment"  readonly="true" >
+                            </div>
+
+                        </div>
+
+
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">文本域</label>
+                            <div class="layui-input-block">
+                                <textarea name="desc" placeholder="请输入内容" class="layui-textarea"></textarea>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button type="button" class="layui-btn" onclick="confirmSubmit3('add-user-payment');">点击添加</button>
+                                <!--<button type="reset" class="layui-btn layui-btn-primary">重置</button>-->
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="actionType" value="add">
+                    </form>
+
+                </div>
+
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- 引入底部 -->
+{include file="public/footer"/}
+
+<!-- ivoryJs腳本 -->
+<script src="__STATIC__/admin/js/ivory/ivoryJs.js"></script>
+
+
+
+<script>
+    var lastUserId='';
+    var lastUserName='';
+    var lastCarId='';
+    var lastCarBrand='';
+    var lastCarName='';
+    var lastCarStyle='';
+    var lastUcId='';
+    layui.use(['form','element','table'], function(){
+        var element = layui.element,layer = layui.layer;
+        var form = layui.form,table = layui.table;
+
+        // <!--用户车辆脚本-->
+        //第一个实例
+        //第一个实例
+        table.render({
+            url: '/admin/user_car/userCarList?actionType=list&user_id={$userData['user_id']}',
+            elem: '#user-car-list',
+            cols: [[
+                {field:'name', title: '姓名', width:100,},
+                {field:'uc_id', title: '车辆ID', width:120,},
+                {field:'phone', title: '手机号码', width:120,},
+                {field:'gender', title: '性别', width:100},
+                {field:'id_card', title: '身份证号', width:100},
+                {field:'address', title: '地址预览', width:120,},
+                {field:'create_time', title: '注册日期', width:180,},
+                {field:'login_time', title: '最后登录时间', width:180,},
+
+                // {field:'IDCARD', title: '实名认证', width:100},
+                // {field:'OpenID', title: '绑定微信', width:100},
+                // {field:'Status', title: '状态', width:100},
+                {field:'right', title: '操作', width:120,toolbar:"#user-car-list-toolbar"}
+            ]],
+            // id: 'store-list-reload',
+            page: true,
+            limits:[10, 15, 30, 60, 90, 150],
+            limit: 15,
+            request: {
+                pageName: 'page',
+                limitName: 'limit',
+            },
+            response: {
+                statusName: 'resultCD',
+                statusCode: 200,
+                msgName: 'errorMsg',
+                countName: 'count',
+                dataName: 'data'
+            }
+        });
+
+        // 查看、编辑操作
+        table.on('tool(user-car-list)', function(obj){
+            var data = obj.data;
+            //console.log(data);
+            if(obj.event === 'detail'){
+                location = "/admin/user_car/info?show=user_car&uc_id="+data.uc_id;
+            }else if(obj.event === 'edit'){
+                location = "/admin/user_car/info?show=user_car&uc_id="+data.uc_id;
+            }
+        });
+        // <!--用户车辆脚本结束-->
+
+        form.on('select(car-brand)', function(data){
+            lastCarBrand=data.value;
+            data = {'brand':lastCarBrand};
+            //console.log(data);
+            $.ajax({
+                url:'/admin/car/findCarName',
+                data:data,
+                success:function (data) {
+                    data=data.data;
+                    var content='<option value="">选择品牌</option>';
+                    var length = data.length;
+                    for(j=0;j < length;j++){
+                        content=content+' <option value='+data[j].name+'>'+data[j].name+'</option>'
+                    }
+
+                    $('#car-name').html(content.toString());
+                    form.render('select');
+
+                }
+            });
+
+        });
+        form.on('select(car-name)', function(data){
+            lastCarName=data.value;
+            data = {'name':lastCarName,'brand':lastCarBrand};
+
+            $.ajax({
+                url:'/admin/car/findCarName',
+                data:data,
+                success:function (data) {
+                    data=data.data;
+
+                    var content='<option value="">选择品牌</option>';
+                    var length = data.length;
+                    for(j=0;j < length;j++){
+                        content=content+' <option value='+data[j].style+'>'+data[j].style+'</option>'
+                    }
+
+                    $('#car-style').html(content.toString());
+                    form.render('select');
+
+
+                }
+            });
+
+        });
+
+        form.on('select(car-style)',function (data) {
+            lastCarStyle=data.value;
+            data={'name':lastCarName,'brand':lastCarBrand,'style':lastCarStyle};
+            $.ajax({
+                url:'/admin/car/findCarName',
+                data:data,
+                success:function (data) {
+                    data=data.data;
+                    lastCarId=data[0].car_id;
+                    //console.log(lastCarId);
+
+
+                    // var content='<option value="">选择品牌</option>';
+                    // var length = data.length;
+                    // for(j=0;j < length;j++){
+                    //     content=content+' <option value='+data[j].style+'>'+data[j].style+'</option>'
+                    // }
+                    //
+                    // $('#car-style').html(content.toString());
+                    // form.render('select');
+
+
+                }
+            })
+
+        })
+
+        // 修改用户信息数据
+        form.on('submit(submit1)', function(data){
+
+            data=$("#add-user").serializeJson();
+            if (data.status===undefined || data.status!=1){
+                data={'status':'0'}
+                //data.status='0';
+            }else {
+                data={};
+            }
+
+            layer.open({
+                title : '提示',
+                content : '确定要提交吗？',
+                btn : ['确定', '取消'],
+                yes  : function (index, layero){
+                    layer.close(index);
+                    $("#add-user").ajaxSubmit({
+                        url:'/admin/user/editUser',
+                        type:'post',
+                        data:data,
+                        success:function (data) {
+
+                            if (data.resultCD == 200){
+                                layer.msg("修改成功")
+
+                            }else {
+                                layer.msg(data.errorMsg)
+                            }
+                        }
+                    });
+                    //$("#"+obj)[0].reset();
+                }
+            });
+            return false;
+        });
+
+
+
+    });
+</script>
+
+<script>
+    //用户添加成功后，继续添加用户车辆
+    // function confirmSubmit(obj){
+    //
+    //     data=$("#add-user").serializeJson();
+    //     if (data.status===undefined || data.status!=1){
+    //         data={'status':'0'}
+    //         //data.status='0';
+    //     }else {
+    //         data={};
+    //     }
+    //     console.log(data);
+    //     layer.open({
+    //         title : '提示',
+    //         content : '确定要提交吗？',
+    //         btn : ['确定', '取消'],
+    //         yes  : function (index, layero){
+    //             layer.close(index);
+    //             $("#"+obj).ajaxSubmit({
+    //                 url:'/admin/user/editUser',
+    //                 type:'post',
+    //                 data:data,
+    //                 success:function (data) {
+    //
+    //                     if (data.resultCD == 200){
+    //                         layer.msg("修改成功")
+    //
+    //                     }else {
+    //                         layer.msg(data.errorMsg)
+    //                     }
+    //                 }
+    //             });
+    //             //$("#"+obj)[0].reset();
+    //         }
+    //     });
+    //
+    // }
+
+</script>
+
+
+<script>
+
+
+    function confirmSubmit1(obj){
+
+        layer.open({
+            title : '提示',
+            content : '确定要提交吗？',
+            btn : ['确定', '取消'],
+            yes  : function (index, layero){
+                layer.close(index);
+                $("#"+obj).ajaxSubmit({
+                    url:'/admin/user_car/addUserCar',
+                    type:'post',
+                    //data:{'car_id'},
+                    success:function (data) {
+
+                        if (data.resultCD == 200){
+                            data=data.data;
+                            lastCarId=data.car_id;
+                            lastUcId=data.uc_id;
+                            lastUserId=data.user_id;
+                            // console.log(data);
+
+                            layer.msg("用户车辆添加成功,可继续添加用户车贷")
+
+                            var element = layui.element;
+                            var form = layui.form;
+                            if (!$("[lay-id='add-insurance']")[0]) {
+                                var title3 = document.getElementById('add-insurance-tab').innerHTML;
+
+
+                                element.tabAdd('user-tab', {
+                                    title: '添加保险'
+                                    // ,content:'njkkjoh'
+                                    , content: title3 //支持传入html
+                                    , id: 'add-insurance'
+                                });
+
+                            }
+                            if (!$("[lay-id='add-payment']")[0]) {
+                                var title4 = document.getElementById('add-payment-tab').innerHTML;
+
+                                element.tabAdd('user-tab', {
+                                    title: '添加车贷'
+                                    , content: title4 //支持传入html
+                                    , id: 'add-payment'
+                                });
+
+                            }
+
+                            //绑定页面数据
+                            $("#user-name-insurance").val(lastUserName);
+                            $('#user-id-insurance').val(lastUserId);
+                            $('#uc_id-insurance').val(lastUcId);
+                            $('#car-brand-insurance').val(lastCarBrand);
+                            $('#car-name-insurance').val(lastCarName);
+                            $('#car-style-insurance').val(lastCarStyle);
+
+                            //绑定payment页面数据
+                            console.log( $('#user-name-payment'));
+                            $('#user-name-payment').val(lastUserName);
+                            $('#user-id-payment').val(lastUserId);
+                            $('#uc_id-payment').val(lastUcId);
+                            $('#car-brand-payment').val(lastCarBrand);
+                            $('#car-name-payment').val(lastCarName);
+                            $('#car-style-payment').val(lastCarStyle);
+
+
+                            form.render();
+
+                        }else {
+                            layer.msg(data.errorMsg)
+                        }
+                    }});
+                // $("#"+obj)[0].reset();
+            }
+        });
+
+    }
+
+</script>
+
+<script>
+    //添加保险按钮
+    function confirmSubmit2(obj){
+
+        layer.open({
+            title : '提示',
+            content : '确定要提交吗？',
+            btn : ['确定', '取消'],
+            yes  : function (index, layero){
+                layer.close(index);
+                $("#"+obj).ajaxSubmit({
+                    url:'/admin/insurance/addInsurance',
+                    type:'post',
+                    success:function (data) {
+
+                        if (data.resultCD == 200){
+                            data=data.data;
+                            lastCarId=data.car_id;
+                            lastUcId=data.uc_id;
+                            lastUserId=data.user_id;
+                            // console.log(data);
+
+                            layer.msg("保险添加成功")
+
+                            // var element = layui.element;
+                            // var form = layui.form;
+                            // if (!$("[lay-id='add-insurance']")[0]) {
+                            //     var title3 = document.getElementById('add-insurance-tab').innerHTML;
+                            //
+                            //
+                            //     element.tabAdd('user-tab', {
+                            //         title: '添加保险'
+                            //         // ,content:'njkkjoh'
+                            //         , content: title3 //支持传入html
+                            //         , id: 'add-insurance'
+                            //     });
+                            //
+                            // }
+                            // if (!$("[lay-id='add-payment']")[0]) {
+                            //     var title4 = document.getElementById('add-insurance-tab').innerHTML;
+                            //
+                            //     element.tabAdd('user-tab', {
+                            //         title: '添加车贷'
+                            //         , content: title4 //支持传入html
+                            //         , id: 'add-payment'
+                            //     });
+                            //
+                            // }
+                            // $('#user-name-insurance').val(lastUserName);
+                            // $('#user-id-payment').val(lastUserId);
+                            // form.render();
+
+                        }else {
+                            layer.msg(data.errorMsg)
+                        }
+                    }});
+                // $("#"+obj)[0].reset();
+            }
+        });
+
+    }
+
+</script>
+<script>
+    //添加保险按钮
+    function confirmSubmit3(obj){
+
+        layer.open({
+            title : '提示',
+            content : '确定要提交吗？',
+            btn : ['确定', '取消'],
+            yes  : function (index, layero){
+                layer.close(index);
+                $("#"+obj).ajaxSubmit({
+                    url:'/admin/payment/addPayment',
+                    type:'post',
+                    success:function (data) {
+
+                        if (data.resultCD == 200){
+                            data=data.data;
+                            lastCarId=data.car_id;
+                            lastUcId=data.uc_id;
+                            lastUserId=data.user_id;
+                            // console.log(data);
+
+                            layer.msg("车贷添加成功")
+
+                            // var element = layui.element;
+                            // var form = layui.form;
+                            // if (!$("[lay-id='add-insurance']")[0]) {
+                            //     var title3 = document.getElementById('add-insurance-tab').innerHTML;
+                            //
+                            //
+                            //     element.tabAdd('user-tab', {
+                            //         title: '添加保险'
+                            //         // ,content:'njkkjoh'
+                            //         , content: title3 //支持传入html
+                            //         , id: 'add-insurance'
+                            //     });
+                            //
+                            // }
+                            // if (!$("[lay-id='add-payment']")[0]) {
+                            //     var title4 = document.getElementById('add-insurance-tab').innerHTML;
+                            //
+                            //     element.tabAdd('user-tab', {
+                            //         title: '添加车贷'
+                            //         , content: title4 //支持传入html
+                            //         , id: 'add-payment'
+                            //     });
+                            //
+                            // }
+                            // $('#user-name-insurance').val(lastUserName);
+                            // $('#user-id-payment').val(lastUserId);
+                            // form.render();
+
+                        }else {
+                            layer.msg(data.errorMsg)
+                        }
+                    }});
+                // $("#"+obj)[0].reset();
+            }
+        });
+
+    }
+
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

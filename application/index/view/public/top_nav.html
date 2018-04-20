@@ -1,0 +1,79 @@
+      <!-- 顶部导航开始 -->
+        <div class="top_nav">
+          <div class="nav_menu">
+            <nav>
+              <div class="nav toggle">
+                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+              </div>
+
+              <ul class="nav navbar-nav navbar-right">
+                <li class="">
+                  <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <img src="__STATIC__/admin/images/default-portrait.png" alt="">管理员
+                    <span class=" fa fa-angle-down"></span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-usermenu pull-right">
+                    <li><a href="{:url('/admin/login/logout')}"><i class="fa fa-sign-out pull-right"></i>退出</a></li>
+                  </ul>
+                </li>
+
+                <li role="presentation" class="dropdown">
+                  <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-envelope-o"></i>
+                    <span class="badge bg-green" id="reserved_count"></span>
+                  </a>
+                  <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu"></ul>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+        <script>
+          $(function(){
+            $.ajax({
+              url:'{:url("/admin/index/UserReservedInfo")}',
+              type:'post',
+              dataType:'json',
+              async: false,
+              success:function(res){
+                var i = 0,
+                    html = "",
+                    data = res.data;
+                if(res.code == 200){
+                  while(i < res.data.length){
+                     if(data[i].portrait){
+                       portrait = '<img src="{$Think.config.custom.apiDomain}'+data[i].portrait+'" width="100%" style="margin-bottom:10px;">';
+                     }else{
+                       portrait = '<img src="__STATIC__/admin/images/default-portrait.png" width="100%" style="margin-bottom:10px;">';
+                     }
+                     html += '<li>\
+                      <a>\
+                        <span class="image">'+portrait+'</span>\
+                        <span>\
+                          <span>'+data[i].name+'</span>\
+                          <span class="time">'+data[i].Time+'</span>\
+                        </span>\
+                        <span class="message">'+data[i].info+'</span>\
+                      </a>\
+                    </li>';
+                     i++;
+                  }
+                  html += '<li>\
+                        <div class="text-center">\
+                          <a href="{:url("/admin/user_reserved/infoList")}">\
+                            <strong>查看更多</strong>\
+                            <i class="fa fa-angle-right"></i>\
+                          </a>\
+                        </div>\
+                      </li>';
+                  $('#reserved_count').html(res.count);
+                }else{
+                  html += '<li class="text-center">'+res.msg+'</li>';
+                }
+                $('#menu1').html(html);
+                
+              }
+            })
+          })
+        </script>
+        <!-- 顶部导航结束 -->

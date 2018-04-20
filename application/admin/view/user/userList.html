@@ -1,0 +1,209 @@
+<!-- 头部 -->
+{include file="public/head"/}
+<!-- 引入侧边栏菜单 -->
+{include file="public/sidebar"/}
+
+<!-- 引入顶部导航 -->
+{include file="public/top_nav"/}
+<!-- 内容开始 -->
+<div class="right_col" role="main">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="this_location"><a href="/admin">主页</a> > <a href="">用户列表</a></div>
+        <div class="x_panel">
+            <div class="x_title">
+                <h2 class="border_top"><a href="{:url('/admin/user/userList')}">用户列表</a></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a href="{:url('/admin/user/addUser')}"><i class="glyphicon glyphicon-plus"></i> 新增</a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <form id="search-user" autocomplete="off">
+                <div class="layui-form" style="margin-left:7px;">
+                    <div class="layui-inline">
+                        <input name="name" type="text" class="layui-input" placeholder="请输入姓名查询">
+                    </div>
+                    <div class="layui-inline">
+                        <input name="phone" type="text" class="layui-input" placeholder="请输入登录账号查询" >
+                    </div>
+
+                    <div class="layui-inline">
+                        <select name="gender" >
+                            <option value="">性别</option>
+                            <option value="1">男</option>
+                            <option value="0">女</option>
+                            <option value="2">保密</option>
+                        </select>
+                    </div>
+
+                    <div class="layui-inline">
+                        <select name="status" >
+                            <option value="">状态</option>
+                            <option value="1">正常</option>
+                            <option value="0">禁用</option>
+                        </select>
+                    </div>
+
+                    <div class="layui-input-inline">
+                        <input class="layui-input" name='log_time' id="log_time" placeholder="登录日期范围 " type="text" autocomplete="off">
+                    </div>
+
+                    <div class="layui-input-inline">
+                        <input class="layui-input" name="reg_time" id="reg_time" placeholder="注册日期范围 " type="text" autocomplete="off">
+                    </div>
+
+
+                    <div class="layui-inline">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-success search_btn" id="search-user-id">查询</button>
+                        </div>
+                    </div>
+            </div>
+            </form>
+            <div class="layui-tab-content">
+                <!-- 表格 -->
+                <table class="layui-hide" id="store-list" lay-filter="store-list"></table>
+                <script type="text/html" id="store-list-toolbar">
+                    <div class="btn-group">
+                        <!-- <button class="btn btn-success btn-xs" lay-event="detail"><i class="fa fa-location-arrow"></i> 查看</button> -->
+                        <button class="btn btn-info btn-xs" lay-event="edit"><i class="fa fa-pencil-square-o"></i> 编辑</button>
+                        <button class="btn btn-danger btn-xs" lay-event="del"><i class="fa fa-trash"></i> 删除</button>
+                    </div>
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /内容结束 -->
+
+<!-- 引入底部 -->
+{include file="public/footer"/}
+<!-- 引入ivoryJs脚本-->
+<script src="__STATIC__/admin/js/ivory/ivoryJs.js"></script>
+
+<script>
+
+    layui.use(['layer','form','table','laydate'],function(){
+        var layer = layui.layer,
+            form = layui.form,
+            table = layui.table,
+            laydate = layui.laydate;
+
+
+
+        laydate.render({
+            elem: '#reg_time'
+            ,type: 'datetime'
+            ,range: true,
+            format:'yyyy-MM-dd HH:mm:ss'
+        });
+        laydate.render({
+            elem: '#log_time'
+            ,type: 'datetime'
+            ,range: true,
+            format:'yyyy-MM-dd HH:mm:ss'
+        });
+
+        //第一个实例
+         var tableIns=table.render({
+            url: '/admin/user/userList?actionType=list',
+            elem: '#store-list',
+            height:'full-305',
+            cols: [[
+                {field:'portrait', title:'头像',width:60,templet:function(d){
+                    if(d.portrait){
+                        return '<img src="{$Think.config.custom.apiDomain}'+d.portrait+'" class="layui-circle" width="30px" height="100%"/>'
+                    }else{
+                        return '<img src="__STATIC__/admin/images/default-portrait.png" class="layui-circle" width="30px" height="100%"/>'
+                    }
+                }},
+                {field:'name', title: '姓名',width:120},
+                {field:'account', title: '登录账号',width:120},
+                {field:'gender', title: '性别',width:90},
+                {field:'id_card', title: '身份证号',width:180},
+                {field:'address', title: '地址预览',width:''},
+                {field:'status', title: '状态', width:70,templet:function(d){
+                    if(d.status==1){
+                        return '<span>正常</span>'
+                    }else{
+                        return '<span style="color:#F581B1;">禁用</span>'
+                    }
+                }},
+                {field:'login_ip', title: '登录IP',width:150},
+                {field:'login_time', title: '登录时间',width:170},
+                // {field:'IDCARD', title: '实名认证', width:100},
+                // {field:'OpenID', title: '绑定微信', width:100},
+                {field:'create_time', title: '注册日期',width:170},
+                {field:'right', title: '操作',toolbar:"#store-list-toolbar",width:150}
+            ]],
+             id: 'store-list-reload',
+            page: true,
+            limits:[10, 15, 30, 60, 90, 150],
+            limit: 15,
+            request: {
+                pageName: 'page',
+                limitName: 'limit',
+            },
+            response: {
+                statusName: 'resultCD',
+                statusCode: 200,
+                msgName: 'errorMsg',
+                countName: 'count',
+                dataName: 'data'
+            },
+            where:{},
+
+        });
+
+        // 查看、编辑操作
+        table.on('tool(store-list)', function(obj){
+            var data = obj.data;
+            switch(true){
+                case (obj.event === 'detail'):
+                    console.log(obj);
+                    break;
+                case (obj.event === 'edit'):
+                    location = "/admin/user/userInfo?user_id="+data.user_id;
+                    break;
+                case (obj.event === 'del'):
+                    layer.confirm("确定删除吗？",{
+                        icon:3,
+                        title:"提示信息",
+                        shadeClose:true,
+                    },function(index){
+                        var index = layer.msg('删除中',{icon:16,time:false})
+                        $.get('/admin/user/deleteUser',{
+                            user_id:data.user_id,
+                            account:data.account,
+                        },function(res){
+                            if(res.code==200){
+                                layer.msg(res.msg,{
+                                    icon:6,
+                                    time:2000,
+                                });
+                                 $('.layui-laypage-btn').click();
+                            }else{
+                                layer.msg(msg,{
+                                    icon:5,
+                                    time:2000
+                                })
+                            }
+                        })
+                    })
+                    break;
+            }
+        });
+
+        //搜索
+         $("#search-user-id").on('click',function () {
+             var option={};
+             option.where =$('#search-user').serializeJson();
+             option.page ={
+                 curr: 1 //重新从第 1 页开始
+             };
+             tableIns.reload(option)
+         });
+    })
+</script>
+
+</body>
+</html>

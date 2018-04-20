@@ -1,0 +1,178 @@
+<!-- 头部 -->
+{include file="public/head"/}
+<!-- 引入侧边栏菜单 -->
+{include file="public/sidebar"/}
+
+<!-- 引入顶部导航 -->
+{include file="public/top_nav"/}
+ <!--内容开始-->
+<div class="right_col" role="main">
+
+    <div class="col-md-12 col-sm-12 col-xs-12 ">
+        <div class="this_location"><a href="/admin">主页</a> > <a href="{:url('/admin/user/addUser')}">添加用户</a></div>
+         <div class="x_panel">
+            <div class="layui-tab layui-tab-brief" lay-filter="user-tab">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">用户信息</li>
+                </ul>
+                <a href="{:url('/admin/user/userList')}" style="position:absolute;top:15px;right:35px;"><i class="fa fa-reply-all"></i> 返回</a>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        <form class="layui-form mt-20" method="post" action="" name="form1" autocomplete="off">
+                            <div class="layui-form-item ">
+                                <label class="layui-form-label">姓名</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="name" class="layui-input" value="" autocomplete="off" lay-verify="required">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">性别</label>
+                                <div class="layui-input-block">
+                                    <input type="radio" name="gender" value='1' title="男">
+                                    <input type="radio" name="gender" value='0' title="女" >
+                                    <input type="radio" name="gender" value='2' title="保密" checked>
+                                </div>
+                            </div>
+                            <div class="layui-form-item ">
+                                <label class="layui-form-label">登录账号</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="account" class="layui-input" value="" autocomplete="off" lay-verify="required|phone">
+                                </div>
+                                <div class="layui-form-mid layui-word-aux">登录账号必须为手机号码</div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">登录密码</label>
+                                <div class="layui-input-inline">
+                                    <input type="password" name="password" class="layui-input" value="" autocomplete="off" lay-verify="required|password">
+                                </div>
+                                <div class="layui-form-mid layui-word-aux">密码必须6到12位，且不能出现空格</div>
+                            </div>
+                             <div class="layui-form-item ">
+                                <label class="layui-form-label">手机号码</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="phone" class="layui-input" value="" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="layui-form-item ">
+                                <label class="layui-form-label">身份证号</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="id_card" class="layui-input" lay-verify="identity" autocomplete="off">
+                                </div>
+                            </div>
+            
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">地址</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="address" class="layui-input"  autocomplete="off">
+                                </div>
+                            </div>
+            
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">状态</label>
+                                <div class="layui-input-block">
+                                    <input type="radio" name="status" title="正常" value="1" checked>
+                                    <input type="radio" name="status" title="禁用" value="0">
+                                </div>
+                            </div>
+            
+                            <div class="layui-form-item layui-form-text">
+                                <label class="layui-form-label">描述</label>
+                                <div class="layui-input-block">
+                                    <textarea name="description" class="layui-textarea" lay-verify="description" autocomplete="off"></textarea>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" lay-submit="" lay-filter="user_submit">提交</button>
+                                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                                </div>
+                            </div>
+            
+                            <input type="hidden" name="actionType" value="add">
+                        </form>
+                    </div>
+
+                </div>
+            
+            </div>
+        </div> 
+       
+    </div>
+
+</div>
+<!-- 引入底部 -->
+{include file="public/footer"/}
+
+<script type="text/javascript">
+
+    layui.use(['layer','form','element','laydate'],function(){
+
+        var layer = layui.layer,
+            form = layui.form,
+            element = layui.element,
+            laydate = layui.laydate;
+
+            //监听添加用户
+            form.on('submit(user_submit)',function(obj){
+
+                var field = obj.field;
+                layer.confirm('确定要提交吗？',{
+                    title:'提示信息',
+                    icon:3,
+                },function(index){
+                    $.post({
+                        url:'/admin/user/addUser',
+                        data:field,
+                        success:function (data) {
+
+                            if (data.resultCD == 200){
+
+                                layer.msg("用户添加成功")
+
+                            }else {
+                                layer.alert(data.errorMsg+',请检查')
+
+                            }
+                        }
+                    })
+                });
+                return false;
+            })
+
+            // 自定义验证
+            form.verify({
+                password:[
+                    /^[\S]{6,12}$/,
+                    '密码必须6到12位，且不能出现空格'
+                ],
+                description:function (value, item) {
+                    if(value.length > 240){
+                        return '最多只能输入240个字符'
+                    }
+                },
+
+            })
+
+    })
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

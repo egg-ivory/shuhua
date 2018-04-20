@@ -1,0 +1,154 @@
+
+
+<!-- 头部 -->
+{include file="public/head"/}
+<!-- 引入侧边栏菜单 -->
+{include file="public/sidebar"/}
+
+<!-- 引入顶部导航 -->
+{include file="public/top_nav"/}
+<style>
+    .layui-table tr th{color:black;}
+    .layui-table tr th,td{text-align:center;}
+    .layui-form-select{width:100px;}
+</style>
+<!-- 内容开始 -->
+<div class="right_col" role="main">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div style="margin:0 0 10px 0px;background:white;padding:15px;"><a href="/admin">主页</a> > <a href="">管理员列表</a></div>
+        <div class="x_panel">
+
+            <div class="x_title">
+                <h2>管理员列表</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a href="{:url('/admin/admin/addAdmin')}"><i class="glyphicon glyphicon-plus"></i> 新增</a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <form id="search-user" autocomplete="off">
+
+                <div class="layui-form" style="margin-left:7px;">
+
+                    <div class="layui-inline">
+                        <input name="admin_name" type="text" class="layui-input" placeholder="名称">
+                    </div>
+
+                    <div class="layui-inline">
+
+                        <button type="button" class="layui-btn" id="search-car-id">查询</button>
+                    </div>
+                </div>
+            </form>
+            <div class="layui-tab-content">
+                <!-- 表格 -->
+                <table class="layui-hide" id="store-list" lay-filter="store-list"></table>
+                <script type="text/html" id="store-list-toolbar">
+                    <button class="layui-btn layui-btn-primary layui-btn-xs" lay-event="reset">重置</button>
+
+                    <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</button>
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- /内容结束 -->
+
+<!-- 引入底部 -->
+{include file="public/footer"/}
+
+<!-- 引入ivoryJs脚本-->
+<script src="__STATIC__/admin/js/ivory/ivoryJs.js"></script>
+<script>
+    layui.use(['layer','form','table','laydate'],function(){
+        var layer = layui.layer,
+            form = layui.form,
+            table = layui.table;
+
+
+        //车列表
+        var tableIns=table.render({
+            url: '/admin/admin/adminList?actionType=list',
+            elem: '#store-list',
+            cols: [[
+                {field:'admin_id', title: '管理员id', width:100,},
+                {field:'admin_name', title: '名称', width:100,},
+                {field:'right', title: '操作', width:170,toolbar:"#store-list-toolbar"}
+            ]],
+            id: 'store-list-reload',
+            page: true,
+            limits:[10, 15, 30, 60, 90, 150],
+            limit: 15,
+            request: {
+                pageName: 'page',
+                limitName: 'limit',
+            },
+            response: {
+                statusName: 'resultCD',
+                statusCode: 200,
+                msgName: 'errorMsg',
+                countName: 'count',
+                dataName: 'data'
+            },
+            where:{},
+
+        });
+
+        //查找
+        $("#search-car-id").on('click',function () {
+            var option={};
+            option.where =$('#search-user').serializeJson();
+            option.page ={
+                curr: 1 //重新从第 1 页开始
+            };
+            tableIns.reload(option)
+        });
+
+       // 查看、编辑操作、删除
+        table.on('tool(store-list)', function(obj){
+            var data = obj.data;
+            //console.log(data);
+            if(obj.event === 'reset'){
+                layer.confirm('确定重置该管理员密码',function () {
+                    var url="/admin/admin/resetAdmin?admin_id="+data.admin_id;
+                    $.ajax({
+                        url: url,
+                        type: 'post',
+                        data:{"actionType":"reset"},
+                        success:function (data) {
+                            if (data.resultCD == 200){
+                                location = "/admin/admin/adminList";
+                            }else {
+                                layer.alert(data.errorMsg)
+                            }
+
+                        }
+                    })
+
+                })
+
+            }else if (obj.event === 'delete'){
+                layer.confirm('确定删除该管理员',function () {
+                    var url="/admin/admin/deleteAdmin?admin_id="+data.admin_id;
+                    $.ajax({
+                        url: url,
+                        type: 'post',
+                        data:{"actionType":"delete"},
+                        success:function (data) {
+                            if (data.resultCD == 200){
+                                location = "/admin/admin/adminList";
+                            }else {
+                                layer.alert(data.errorMsg)
+                            }
+
+                        }
+                    })
+
+                })
+
+            }
+
+        });
+    })
+</script>
+

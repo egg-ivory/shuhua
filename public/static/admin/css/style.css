@@ -1,0 +1,87 @@
+﻿/*当前位置*/
+.this_location{
+	margin:0 0 10px 0px;
+	background:white;
+	padding:15px;
+}
+.layui-table tr th{
+	color:black;
+}
+.layui-table tr th,td{
+	text-align:center;
+}
+.layui-form-select{
+	width:100px;
+}
+
+
+
+/*ivory*/
+.mt-10{margin-top:10px !important;}
+.mb-10{margin-bottom:10px !important;}
+
+.mt-20{margin-top:20px !important;}
+.mb-20{margin-bottom:20px !important;}
+
+.font-red{color:#FF5722;}
+.font-green{color:#009688;}
+.font-yellow{color:#FFB800;}
+.font-blue{color:#01AAED;}
+
+.login-main {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 350px;
+    margin: 0 auto;
+}
+
+.login-main header {
+    margin-top: 150px;
+    height: 35px;
+    line-height: 35px;
+    font-size: 30px;
+    font-weight: 100;
+    text-align: center;
+}
+
+.login-main header span.version {
+    font-size: 12px;
+}
+
+.login-main header, .login-main form, .login-main form .layui-input-inline {
+    margin-bottom: 15px;
+}
+
+.login-main form .layui-input-inline, .login-main form .layui-input-inline input, .login-main form .layui-input-inline button {
+    width: 100%;
+}
+
+.login-main form .login-btn {
+    margin-bottom: 5px;
+}
+
+.login-main form .verify-box input {
+    display: inline-block;
+    width: 60%
+}
+
+.login-main form .verify-box img {
+    display: inline-block;
+    margin-left: 2%;
+    width: 38%;
+    height: 38px;
+}
+
+#login_qrcode, #reg_qrcode{padding:15px; text-align:center; margin-right:15px;}
+
+.ztree *{font-size:14px;}
+
+.hidden{display:none;}
+
+.count-box{padding-top:5px; padding-bottom:5px; color:#FF5722;}
+.count-span{padding-right:15px;}
+
+.ivory-text-content {width: 38%;}

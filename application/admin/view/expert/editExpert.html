@@ -1,0 +1,125 @@
+
+
+<!-- 头部 -->
+{include file="public/head"/}
+<!-- 引入侧边栏菜单 -->
+{include file="public/sidebar"/}
+
+<!-- 引入顶部导航 -->
+{include file="public/top_nav"/}
+
+<!-- 内容开始 -->
+
+<div class="right_col" role="main">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div style="margin:0 0 10px 0px;background:white;padding:15px;"><a href="/admin">主页</a> > <a href="">增加名家</a></div>
+        <a href="{:url('/admin/expert/index')}" style="position:absolute;top:15px;right:35px;"><i class="fa fa-reply-all"></i> 返回</a>
+        <div class="x_panel">
+
+            <div class="x_title">
+                <h2>增加名家</h2>
+                <div class="clearfix"></div>
+            </div>
+
+            <form class="layui-form" method="post" action=""  lay-filter="form2" autocomplete="off">
+
+                <div class="layui-form-item hidden">
+
+                        <input type="text" name="expert_id" value="{$expertData['expert_id']}" required  lay-verify="required" autocomplete="off" class="layui-input">
+
+                </div>
+
+                <div class="layui-form-item ">
+                    <label class="layui-form-label">输入名家名称</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="expert_name" value="{$expertData['expert_name']}" required  lay-verify="required" placeholder="请输入管理员名" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">
+                    </div>
+                </div>
+
+                <div class="layui-form-item ">
+                    <label class="layui-form-label">输入名家登录账户名</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="account" required  value="{$expertData['account']}" lay-verify="required" placeholder="请输入管理员名" autocomplete="off" readonly class="layui-input">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">
+                        不可更改
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">简述</label>
+                    <div class="layui-input-block">
+                        <textarea name="description" lay-verify='description' placeholder="请输入描述，不超过240个字符" class="layui-textarea"> {$expertData['description']}</textarea>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn"  lay-submit="" lay-filter="submit">修改</button>
+                    </div>
+                </div>
+
+            </form>
+
+
+        </div>
+    </div>
+</div>
+
+<!-- /内容结束 -->
+<!-- 引入底部 -->
+{include file="public/footer"/}
+
+<script>
+    layui.use(['layer','form','table','laydate'],function(){
+        var layer = layui.layer,
+            form = layui.form,
+            table = layui.table,
+            laydate=layui.laydate;
+
+        // 修改车辆
+        form.on('submit(submit)', function(data){
+            var data1=data.field;
+            layer.open({
+                title : '提示',
+                content : '确定要修改吗？',
+                btn : ['确定', '取消'],
+
+                yes  : function (index, layero){
+                    layer.close(index);
+                    $.ajax({
+                        url:'/admin/expert/editExpert',
+                        type:'post',
+                        data:data1,
+                        success:function (data) {
+
+                            if (data.resultCD == 200){
+                                layer.msg("修改成功")
+                                location.reload();
+                            }else {
+                                layer.alert(data.errorMsg+',请检查')
+
+                            }
+                        }});
+                }
+            });
+            return false;
+        });
+
+        //自定义验证
+        form.verify({
+
+            description:function (value, item) {
+
+                if(value.length>240){
+                    return '输入字符长度大于240';
+                }
+            }
+        });
+
+    })
+
+
+</script>
